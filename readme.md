@@ -1,4 +1,4 @@
-# Minimal Site Code ReadMe
+# Minimal Eve Site Code ReadMe
 ---
 
 ## Introduction
