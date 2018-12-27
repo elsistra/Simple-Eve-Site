@@ -12,14 +12,14 @@ const realtimeServer = io(httpServer);
 // Set the View Engine
 app.set('view engine', 'ejs');
 // Connect to Database
-var url = "mongodb://localhost:27017/rtns";
+var url = "mongodb://localhost:27017/ses";
 mongodb.connect(url, function(err, client) {
   if (err) throw err;
   console.log("Database connection success");
   // MongoDB includes a ObjectID property
   const ObjectId = mongodb.ObjectId;
   // Specify the Database name for MongoDB
-  const db = client.db('rtns');
+  const db = client.db('ses');
   app.set('db', db);
   // Specify the collection inside the database we will be working with
   const users = db.collection("users");
@@ -37,6 +37,7 @@ mongodb.connect(url, function(err, client) {
   require('./routes/register')(app);
   require('./routes/log-in')(app);
   require('./routes/admin')(app);
+  require('./routes/updateRegions')(app);
 
   // REAL TIME SERVER EMITS AND LISTENERS HERE -------------------------------------------------------------
   realtimeServer.on('connect', function (socket) {

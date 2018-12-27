@@ -1,8 +1,18 @@
 <%- include('header'); %>
 <body>
-  <h3>Introduction</h3>
+  <h3>Regions</h3>
   <p>
-    A simple template site written in node.js.
+    A list of all Regions in Eve Online
+  </p>
+  <p>
+    <a href='/updateRegions'>Update List</a>
+    <br /><br />
+
+<% regions.forEach(function(region) { %>
+
+    <%= region._id %><br />
+
+<% }); %>
   </p>
 </body>
 <%- include('footer'); %>
