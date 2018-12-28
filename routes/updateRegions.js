@@ -1,10 +1,8 @@
 const https = require('https');
 
-module.exports = function (app) {
-  app.get('/updateRegions', function (req, res, next) {
-    const db = app.get('db');
-    const regionsCollection = db.collection("regions");
-    https.get('https://esi.evetech.net/latest/universe/regions/?datasource=tranquility', (resp) => {
+const requestDataFromUrl = (url) => {
+  return new Promise((resolve, reject) => {
+    https.get(url, (resp) => {
       let data = '';
 
       // A chunk of data has been received.
@@ -12,21 +10,31 @@ module.exports = function (app) {
         data += chunk;
       });
 
-      // The whole response has been received. Print out the result.
-      resp.on('end', async () => {
-        const regionIdsArray = JSON.parse(data);
-
-        await Promise.all(regionIdsArray.map(async (regionId) => {
-          await regionsCollection.insert({ _id: regionId });
-        }));
-
-        res.end('Success!');
-        next();
+      // The whole response has been received.
+      resp.on('end', () => {
+        resolve(JSON.parse(data));
       });
     }).on("error", (err) => {
-      console.log("Error: " + err.message);
-      res.end('Fail!');
-      next();
+      reject(err);
     });
+  });
+}
+
+module.exports = (app) => {
+  app.get('/updateRegions', async (req, res, next) => {
+    const db = app.get('db');
+    const regionsCollection = db.collection("regions");
+
+    const regionIdsArray = await requestDataFromUrl('https://esi.evetech.net/latest/universe/regions/?datasource=tranquility');
+    await regionsCollection.deleteMany();
+
+    await Promise.all(regionIdsArray.map(async (regionId) => {
+      // Use regionID to get region name using API call
+      const regionInfo = await requestDataFromUrl('https://esi.evetech.net/latest/universe/regions/' + regionId + '/?datasource=tranquility&language=en-us');
+      await regionsCollection.insert({ _id: regionId, name: regionInfo.name});
+    }));
+
+    //res.end('Success!');
+    res.redirect('/');
   });
 }

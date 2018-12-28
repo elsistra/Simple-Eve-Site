@@ -38,6 +38,7 @@ mongodb.connect(url, function(err, client) {
   require('./routes/log-in')(app);
   require('./routes/admin')(app);
   require('./routes/updateRegions')(app);
+  require('./routes/updateItems')(app);
 
   // REAL TIME SERVER EMITS AND LISTENERS HERE -------------------------------------------------------------
   realtimeServer.on('connect', function (socket) {

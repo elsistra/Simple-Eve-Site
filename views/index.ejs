@@ -5,14 +5,26 @@
     A list of all Regions in Eve Online
   </p>
   <p>
-    <a href='/updateRegions'>Update List</a>
+    <a href='/updateRegions'><b>Update Regions</b></a>
     <br /><br />
 
 <% regions.forEach(function(region) { %>
 
-    <%= region._id %><br />
+    <a href='region?id=<%= region._id %>'><%= region.name %></a> <br />
 
 <% }); %>
   </p>
+
+
+  <h3>Items</h3>
+  <p>
+    A list of all Items in Eve Online
+  </p>
+  <p>
+    <a href='/updateItems'><b>Update Items</b></a>
+    <br /><br />
+  </p>
+
+
 </body>
 <%- include('footer'); %>
