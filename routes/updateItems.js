@@ -1,40 +1,8 @@
 const https = require('https');
 
-const requestDataFromUrl = (url) => {
-  return new Promise((resolve, reject) => {
-    https.get(url, (resp) => {
-      let data = '';
-      // A chunk of data has been received.
-      resp.on('data', (chunk) => {
-        data += chunk;
-      });
-      // The whole response has been received.
-      resp.on('end', () => {
-        let parsedData;
-        try {
-          parsedData = JSON.parse(data);
-          resolve(parsedData);
-        } catch (err) {
-          err.context = { data }
-          reject(err);
-        }
-      });
-    }).on("error", (err) => {
-      reject(err);
-    });
-  });
-}
-
-const composeProgressText = (current, total) => {
-  const percent = Math.round(current / total * 100);
-  return percent + '% ' + current.toLocaleString() + '/' + total.toLocaleString();
-}
-
-const composeLogProgressFunction = (progressText) => {
-  return (message, ...args) => {
-    console.log('[' + progressText + '] ' + message + ':', ...args);
-  }
-}
+const { requestDataFromUrl } = require('../lib/requestDataFromUrl');
+const { composeProgressText } = require('../lib/composeProgressText');
+const { composeLogProgressFunction } = require('../lib/composeLogProgressFunction');
 
 module.exports = (app) => {
   app.get('/updateItems', async (req, res, next) => {
