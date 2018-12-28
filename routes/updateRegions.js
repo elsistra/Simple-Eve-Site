@@ -1,24 +1,4 @@
-const https = require('https');
-
-const requestDataFromUrl = (url) => {
-  return new Promise((resolve, reject) => {
-    https.get(url, (resp) => {
-      let data = '';
-
-      // A chunk of data has been received.
-      resp.on('data', (chunk) => {
-        data += chunk;
-      });
-
-      // The whole response has been received.
-      resp.on('end', () => {
-        resolve(JSON.parse(data));
-      });
-    }).on("error", (err) => {
-      reject(err);
-    });
-  });
-}
+const { requestDataFromUrl } = require('../lib/requestDataFromUrl');
 
 module.exports = (app) => {
   app.get('/updateRegions', async (req, res, next) => {
