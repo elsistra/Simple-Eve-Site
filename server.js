@@ -13,8 +13,7 @@ const realtimeServer = io(httpServer);
 // Set the View Engine
 app.set('view engine', 'ejs');
 // Connect to Database
-const url = config.dbUrl;
-mongodb.connect(url, function(err, client) {
+mongodb.connect(config.dbUrl, function(err, client) {
   if (err) throw err;
   console.log("Database connection success");
   // MongoDB includes a ObjectID property
