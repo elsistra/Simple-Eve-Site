@@ -4,7 +4,6 @@ const session = require('express-session');
 const io = require('socket.io');
 const mongodb = require('mongodb');
 const bodyParser = require('body-parser');
-const config = require('./config');
 const app = express();
 const urlencodedBodyParser = bodyParser.urlencoded({ extended: false });
 // Create the HTTP & RealTime Server
@@ -13,7 +12,7 @@ const realtimeServer = io(httpServer);
 // Set the View Engine
 app.set('view engine', 'ejs');
 // Connect to Database
-mongodb.connect(config.dbUrl, function(err, client) {
+mongodb.connect("mongodb://localhost:27017/ses", function(err, client) {
   if (err) throw err;
   console.log("Database connection success");
   // MongoDB includes a ObjectID property
